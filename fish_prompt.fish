@@ -318,29 +318,27 @@ function __bobthefish_prompt_status -S -a last_status -d 'Display symbols for a 
   [ (jobs -l | wc -l) -gt 0 ]
     and set bg_jobs $__bobthefish_bg_job_glyph
 
-  if [ "$nonzero" -o "$superuser" -o "$bg_jobs" ]
+  if [ "$nonzero" ]
     __bobthefish_start_segment $__color_initial_segment_exit
-    if [ "$nonzero" ]
-       set_color normal; set_color -b $__color_initial_segment_exit
-      if [ "$theme_show_exit_status" = 'yes' ]
-      	echo -ns $last_status ' '
-      else
-      	echo -n $__bobthefish_nonzero_exit_glyph
-      end
+    # set_color normal; set_color -b $__color_initial_segment_exit
+    if [ "$theme_show_exit_status" = 'yes' ]
+      echo -ns $last_status ' '
+    else
+      echo -n $__bobthefish_nonzero_exit_glyph
     end
-
-    if [ "$superuser" ]
-      set_color normal; set_color -b $__color_initial_segment_su
-      echo -n $__bobthefish_superuser_glyph
-    end
-
-    if [ "$bg_jobs" ]
-      set_color normal; set_color -b $__color_initial_segment_jobs
-      echo -n $__bobthefish_bg_job_glyph
-    end
-
-    set_color normal
   end
+
+  if [ "$superuser" ]
+    __bobthefish_start_segment $__color_initial_segment_su
+    echo -n $__bobthefish_superuser_glyph
+  end
+
+  if [ "$bg_jobs" ]
+    __bobthefish_start_segment $__color_initial_segment_jobs
+    echo -n $__bobthefish_bg_job_glyph
+  end
+
+  set_color normal
 end
 
 function __bobthefish_prompt_user -S -d 'Display actual user if different from $default_user'
@@ -632,9 +630,9 @@ function __bobthefish_maybe_display_colors -S
 
   __bobthefish_start_segment $__color_initial_segment_exit
   echo -n exit '! '
-  set_color -b $__color_initial_segment_su
+  __bobthefish_start_segment $__color_initial_segment_su
   echo -n su '$ '
-  set_color -b $__color_initial_segment_jobs
+  __bobthefish_start_segment $__color_initial_segment_jobs
   echo -n jobs '% '
   __bobthefish_finish_segments
   set_color normal
