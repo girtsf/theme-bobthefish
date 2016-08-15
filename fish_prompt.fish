@@ -724,6 +724,9 @@ function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
   # Save the last status for later (do this before the `set` calls below)
   set -l last_status $status
 
+  set -q __bobthefish_inited
+    or __bobthefish_init
+
   # Powerline glyphs
   set -l __bobthefish_branch_glyph            \uE0A0
   set -l __bobthefish_ln_glyph                \uE0A1
@@ -1199,6 +1202,9 @@ function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
 
   __bobthefish_maybe_display_colors
 
+  if functions -q -- theme_fish_prompt_pre_func
+    theme_fish_prompt_pre_func
+  end
   __bobthefish_prompt_status $last_status
   __bobthefish_prompt_vi
   __bobthefish_prompt_vagrant
@@ -1227,4 +1233,8 @@ function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
   end
 
   __bobthefish_finish_segments
+
+  if functions -q -- theme_fish_prompt_post_func
+    theme_fish_prompt_post_func
+  end
 end
