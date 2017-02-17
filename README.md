@@ -2,7 +2,7 @@
 
 `bobthefish` is a Powerline-style, Git-aware [fish][fish] theme optimized for awesome.
 
-[![Oh My Fish](https://img.shields.io/badge/Framework-Oh_My_Fish-blue.svg?style=flat)](https://github.com/oh-my-fish/oh-my-fish) [![MIT License](https://img.shields.io/github/license/oh-my-fish/theme-bobthefish.svg?style=flat)](/LICENSE.md) [![Slack Status](https://oh-my-fish-slack.herokuapp.com/badge.svg)](https://oh-my-fish-slack.herokuapp.com)
+[![Oh My Fish](https://img.shields.io/badge/Framework-Oh_My_Fish-blue.svg?style=flat)](https://github.com/oh-my-fish/oh-my-fish) [![MIT License](https://img.shields.io/github/license/oh-my-fish/theme-bobthefish.svg?style=flat)](/LICENSE.md)
 
 ![bobthefish][screencast]
 
@@ -42,7 +42,6 @@ This theme is based loosely on [agnoster][agnoster].
      * Background jobs (**`%`**)
      * You currently have superpowers (**`$`**)
  * Current vi mode
-     * _You'll need to `set -g theme_display_vi yes` to enable_
  * `User@Host` (unless you're the default user)
  * Current RVM, rbenv or chruby (Ruby) version
  * Current virtualenv (Python) version
@@ -77,12 +76,12 @@ set -g theme_display_hg yes
 set -g theme_display_virtualenv no
 set -g theme_display_ruby no
 set -g theme_display_user yes
-set -g theme_display_vi yes
-set -g theme_display_vi_hide_mode default
+set -g theme_display_vi no
 set -g theme_display_date no
 set -g theme_display_cmd_duration yes
 set -g theme_title_display_process yes
 set -g theme_title_display_path no
+set -g theme_title_display_user yes
 set -g theme_title_use_abbreviated_path no
 set -g theme_date_format "+%a %H:%M"
 set -g theme_avoid_ambiguous_glyphs yes
@@ -91,19 +90,25 @@ set -g theme_nerd_fonts yes
 set -g theme_show_exit_status yes
 set -g default_user your_normal_user
 set -g theme_color_scheme dark
+set -g fish_prompt_pwd_dir_length 0
+set -g theme_project_dir_length 1
 ```
 
 **Title options**
 
 - `theme_title_display_process`. By default theme doesn't show current process name in terminal title. If you want to show it, just set to `yes`.
 - `theme_title_display_path`. Use `no` to hide current working directory from title.
+- `theme_title_display_user`. Set to `yes` to show the current user in the tab title (unless you're the default user).
 - `theme_title_use_abbreviated_path`. Default is `yes`. This means your home directory will be displayed as `~` and `/usr/local` as `/u/local`. Set it to `no` if you prefer full paths in title.
 
 **Prompt options**
+
 - `theme_display_ruby`. Use `no` to completely hide all information about Ruby version. By default Ruby version displayed if there is the difference from default settings.
 - `theme_display_vagrant`. This feature is disabled by default, use `yes` to display Vagrant status in your prompt. Please note that only the VirtualBox and VMWare providers are supported.
 - `theme_show_exit_status`. Set this option to yes to have the prompt show the last exit code if it was non_zero instead of just the exclamation mark.
 - `theme_git_worktree_support`. If you do any git worktree shenanigans, setting this to `yes` will fix incorrect project-relative path display. If you don't do any git worktree shenanigans, leave it disabled. It's faster this way :)
+- `fish_prompt_pwd_dir_length`. bobthefish respects the Fish `$fish_prompt_pwd_dir_length` setting to abbreviate the prompt path. Set to `0` to show the full path, `1` (default) to show only the first character of each parent directory name, or any other number to show up to that many characters.
+- `theme_project_dir_length`. The same as `$fish_prompt_pwd_dir_length`, but for the path relative to the current project root. Defaults to `0`; set to any other number to show an abbreviated path.
 
 **Color scheme options**
 
@@ -126,6 +131,7 @@ one of the following options to change the prompt colors.
 - `base16` (or `base16-dark`), `base16-light`. Dark and light variants of the
   default Base16 theme.
 - `zenburn`. An adaptation of Zenburn.
+- `gruvbox`. An adaptation of gruvbox.
 
 Some of these may not look right if your terminal does not support 24 bit color,
 in which case you can try one of the `terminal` schemes (below). However, if
@@ -160,8 +166,34 @@ variables to set the colors of the prompt. See the "Colors" section of
 `fish_prompt.fish` for details.
 
 
+### Overrides
+
+You can disable the theme default greeting, vi mode prompt, right prompt, or title entirely — or override with your own — by adding custom functions to `~/.config/fish/functions`:
+
+- `~/.config/fish/functions/fish_greeting.fish`
+- `~/.config/fish/functions/fish_mode_prompt.fish`
+- `~/.config/fish/functions/fish_right_prompt.fish`
+- `~/.config/fish/functions/fish_title.fish`
+
+To disable them completely, use an empty function:
+
+```fish
+function fish_right_prompt; end
+```
+
+… Or copy one from your favorite theme, make up something of your own, or copy/paste a bobthefish default function and modify it to your taste!
+
+```fish
+function fish_greeting
+  set_color $fish_color_autosuggestion
+  echo "I'm completely operational, and all my circuits are functioning perfectly."
+  set_color normal
+end
+```
+
+
 [fish]:       https://github.com/fish-shell/fish-shell
-[screencast]: https://cloud.githubusercontent.com/assets/53660/15454890/5649a9a6-1ff9-11e6-9bab-ac1f9278f0cb.gif
+[screencast]: https://cloud.githubusercontent.com/assets/53660/18028510/f16f6b2c-6c35-11e6-8eb9-9f23ea3cce2e.gif
 [patching]:   https://powerline.readthedocs.org/en/master/installation.html#patched-fonts
 [fonts]:      https://github.com/Lokaltog/powerline-fonts
 [nerd-fonts]: https://github.com/ryanoasis/nerd-fonts
