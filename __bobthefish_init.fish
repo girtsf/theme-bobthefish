@@ -57,7 +57,7 @@ function __bobthefish_init
        iterm2_prompt_end
     end
 
-    function -v _ underscore_change
+    function underscore_change -v _
       if [ x$_ = xfish ]
         iterm2_precmd
       else
